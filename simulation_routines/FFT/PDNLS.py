@@ -12,10 +12,10 @@ if __name__ == '__main__':
     eq = 'PDNLS'
     alpha = 1
     beta = 1
-    gamma_0 = 0.13
-    mu = 0.1
-    nu = 0.2
-    sigma = 10
+    gamma_0 = 1.1
+    mu = 0.45
+    nu = 1
+    sigma = 16
 
     # Ploteo de Lengua de Arnold
     plot_parameters = 'si'
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # Definición de la grilla
     [tmin, tmax, dt] = [0, 1000, 0.001]
-    [xmin, xmax, dx] = [-30, 30, 0.1]
+    [xmin, xmax, dx] = [-8, 8, 0.1]
     t_grid = np.arange(tmin, tmax + dt, dt)
     x_grid = np.arange(xmin, xmax, dx)
     T = tmax
@@ -58,22 +58,25 @@ if __name__ == '__main__':
     print(str(time_fin - time_init) + ' seg')
 
     # Aligerando campos
-    U1_light = final_fields[0, 0:-1:100, :]
-    U2_light = final_fields[1, 0:-1:100, :]
-    t_light = t_grid[0:-1:100]
+    ratio = 10
+    U1_light = final_fields[0, 0:-1:ratio, :]
+    U2_light = final_fields[1, 0:-1:ratio, :]
+    t_light = t_grid[0:-1:ratio]
 
     # Definiendo variables finales
     modulo_light = np.power(np.power(U1_light, 2) + np.power(U2_light, 2), 0.5)
     arg_light = np.arctan2(U1_light, U2_light)
 
     # Guardando datos
-    file = 'E:/mnustes_science/simulation_data/FFT/IWOSP/homogeneous'
+    file = 'F:/mnustes_science/simulation_data/FFT/28_01_2022/homogeneous'
     subfile = nombre_pndls_gaussian(gamma_0, mu, nu, sigma)
     parameters_np = np.array([alpha, beta, gamma_0, mu, nu])
     if not os.path.exists(file + subfile):
         os.makedirs(file + subfile)
     np.savetxt(file + subfile + '/field_real.txt', U1_light, delimiter=',')
     np.savetxt(file + subfile + '/field_img.txt', U2_light, delimiter=',')
+    np.savetxt(file + subfile + '/X.txt', x_grid, delimiter=',')
+    np.savetxt(file + subfile + '/T.txt', t_light, delimiter=',')
     np.savetxt(file + subfile + '/parameters.txt', parameters_np, delimiter=',')
 
     # Gráficos

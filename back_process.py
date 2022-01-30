@@ -8,6 +8,8 @@ import datetime
 from playsound import playsound
 from scipy.integrate import odeint
 import scipy.sparse as sparse
+from scipy import signal
+from scipy.fftpack import fft, fftshift
 import os
 matplotlib.rcParams['mathtext.fontset'] = 'custom'
 matplotlib.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
@@ -15,6 +17,15 @@ matplotlib.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
 matplotlib.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
+
+
+def triangle(length, amplitude):
+    section = length // 4
+    for direction in (1, -1):
+        for i in range(section):
+            yield i * (amplitude / section) * direction
+        for i in range(section):
+            yield (amplitude - (i * (amplitude / section))) * direction
 
 
 def arnold_tongue_save(gamma_0, mu, nu, file):

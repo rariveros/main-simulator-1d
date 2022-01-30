@@ -13,10 +13,10 @@ if __name__ == '__main__':
     eq = 'PNDLS_forced'
     alpha = 1
     beta = 1
-    gamma_0 = 0.18
+    gamma_0 = 0.6
     mu = 0.1
-    nu = 0.32
-    sigma = 10
+    nu = 0.02
+    sigma = 7
 
     # Ploteo de Lengua de Arnold
     plot_parameters = 'si'
@@ -24,8 +24,8 @@ if __name__ == '__main__':
         arnold_tongue_show(gamma_0, mu, nu)
 
     # Definición de la grilla
-    [tmin, tmax, dt] = [0, 1000, 0.005]
-    [xmin, xmax, dx] = [-70, 70, 0.1]
+    [tmin, tmax, dt] = [0, 500, 0.005]
+    [xmin, xmax, dx] = [-60, 60, 0.1]
     t_grid = np.arange(tmin, tmax + dt, dt)
     x_grid = np.arange(xmin, xmax, dx)
     T = tmax
@@ -61,16 +61,17 @@ if __name__ == '__main__':
     print(str(time_fin - time_init) + ' seg')
 
     # Aligerando campos
-    U1_light = final_fields[0, 0:-1:10, :]
-    U2_light = final_fields[1, 0:-1:10, :]
-    t_light = t_grid[0:-1:10]
+    ratio = 10
+    U1_light = final_fields[0, 0:-1:ratio, :]
+    U2_light = final_fields[1, 0:-1:ratio, :]
+    t_light = t_grid[0:-1:ratio]
 
     # Definiendo variables finales
     modulo_light = np.power(np.power(U1_light, 2) + np.power(U2_light, 2), 0.5)
     arg_light = np.arctan2(U1_light, U2_light)
 
     # Guardando datos
-    file = 'E:/mnustes_science/simulation_data/FD/IWOSP'
+    file = 'F:/mnustes_science/simulation_data/FD/28_01_2022'
     subfile = nombre_pndls_gaussian(gamma_0, mu, nu, sigma)
     parameters_np = np.array([alpha, beta, gamma_0, mu, nu])
     if not os.path.exists(file + subfile):
@@ -80,6 +81,8 @@ if __name__ == '__main__':
     np.savetxt(file + subfile + '/forcing_real.txt', parameters_np, delimiter=',')
     np.savetxt(file + subfile + '/forcing_img.txt', gamma[0], delimiter=',')
     np.savetxt(file + subfile + '/parameters.txt', gamma[1], delimiter=',')
+    np.savetxt(file + subfile + '/X.txt', x_grid, delimiter=',')
+    np.savetxt(file + subfile + '/T.txt', t_light, delimiter=',')
 
     # Gráficos
     pcm = plt.pcolormesh(x_grid, t_light, modulo_light, cmap='jet', shading='auto')
