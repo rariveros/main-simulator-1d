@@ -3,25 +3,37 @@ from functions import *
 from time_integrators import *
 
 if __name__ == '__main__':
-    [xmin, xmax, dx] = [-40, 40, 0.1]
-    length = 20
-    x_grid = np.arange(xmin, xmax, dx)
-    forcing_real = []
-    for i in range(len(x_grid)):
-        if - length / 2 < x_grid[i] < - length / 4:
-            forcing_real_i = (x_grid[i] + length / 2) / (- length / 4 + length / 2)
-        elif - length / 4 < x_grid[i] < 0:
-            forcing_real_i = (x_grid[i] - 0) / (- length / 4 + 0)
-        elif 0 < x_grid[i] < length / 4:
-            forcing_real_i = -(x_grid[i] + 0) / (- length / 4 + 0)
-        elif length / 4 < x_grid[i] < length / 2:
-            forcing_real_i = (x_grid[i] - length / 2) / (length / 4 - length / 2)
-        else:
-            forcing_real_i = 0
-        forcing_real.append(forcing_real_i)
-    forcing_real = np.array(forcing_real)
-    plt.plot(forcing_real)
-    plt.title("Triangular window")
-    plt.ylabel("Amplitude")
-    plt.xlabel("Sample")
-    plt.show()
+    disco = 'F'
+    initial_dir_data = str(disco) + ':/mnustes_science/simulation_data'
+    root = tk.Tk()
+    root.withdraw()
+    directory = filedialog.askdirectory(parent=root, initialdir=initial_dir_data, title='Elección de carpeta')
+    print('Processing ' + str(directory))
+
+    Z_img= np.loadtxt(directory + '/field_img.txt', delimiter=',')
+    Z_real = np.loadtxt(directory + '/field_real.txt', delimiter=',')
+    T = np.loadtxt(directory + '/T.txt', delimiter=',')
+    X = np.loadtxt(directory + '/X.txt', delimiter=',')
+    Z_complex = Z_real + 1j * Z_img
+    Z_module = np.abs(Z_complex)
+    Z_arg = np.angle(Z_complex)
+
+    pcm = plt.pcolormesh(X, T, Z_module, cmap='jet', shading='auto')
+    cbar = plt.colorbar(pcm, shrink=1)
+    cbar.set_label('$R(x, t)$', rotation=0, size=20, labelpad=-27, y=1.1)
+    plt.xlim([X[0], X[-1]])
+    plt.xlabel('$x$', size='20')
+    plt.ylabel('$t$', size='20')
+    plt.grid(linestyle='--', alpha=0.5)
+    plt.savefig(directory + '/module_spacetime.png', dpi=300)
+    plt.close()
+
+    pcm = plt.pcolormesh(X, T, Z_arg, cmap='jet', shading='auto')
+    cbar = plt.colorbar(pcm, shrink=1)
+    cbar.set_label('$\\varphi(x, t)$', rotation=0, size=20, labelpad=-20, y=1.1)
+    plt.xlim([X[0], X[-1]])
+    plt.xlabel('$x$', size='20')
+    plt.ylabel('$t$', size='20')
+    plt.grid(linestyle='--', alpha=0.5)
+    plt.savefig(directory + '/arg_spacetime.png', dpi=300)
+    plt.close()

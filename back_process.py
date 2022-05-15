@@ -3,6 +3,7 @@ import matplotlib
 import shutil
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from matplotlib.colors import TwoSlopeNorm
 import time
 import datetime
 from playsound import playsound
@@ -10,6 +11,9 @@ from scipy.integrate import odeint
 import scipy.sparse as sparse
 from scipy import signal
 from scipy.fftpack import fft, fftshift
+import tkinter as tk
+from tkinter import filedialog
+from basic_units import radians, degrees, cos
 import os
 matplotlib.rcParams['mathtext.fontset'] = 'custom'
 matplotlib.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
