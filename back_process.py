@@ -15,6 +15,8 @@ import tkinter as tk
 from tkinter import filedialog
 from basic_units import radians, degrees, cos
 import os
+from scipy.signal import hilbert, chirp
+
 matplotlib.rcParams['mathtext.fontset'] = 'custom'
 matplotlib.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
 matplotlib.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'

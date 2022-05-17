@@ -10,6 +10,7 @@ if __name__ == '__main__':
     time_init = time.time()
 
     # Definiendo parámetros
+    disc = 'F:/'
     project_name = '/soliton_PDNLS_13_05'
     eq = 'PNDLS_forced'
 
@@ -114,12 +115,12 @@ if __name__ == '__main__':
             modulo_light = np.absolute(U_complex)
             arg_light = np.angle(U_complex)
 
-            gamma_str = np.str(int(gamma_0 * 100) * 0.01)
-            nu_str = np.str(int(nu * 100) * 0.01)
-            mu_str = np.str(int(mu * 100) * 0.01)
+            gamma_str = str(int(gamma_0 * 100) * 0.01)
+            nu_str = str(int(nu * 100) * 0.01)
+            mu_str = str(int(mu * 100) * 0.01)
 
             # Guardando datos
-            file = 'F:/mnustes_science/simulation_data/FD' + project_name
+            file = disc + 'mnustes_science/simulation_data/FD' + project_name
             subfile = nombre_pndls_gaussian(gamma_0, mu, nu, sigma)
             parameters_np = np.array([alpha, beta, gamma_0, mu, nu])
             if not os.path.exists(file + subfile):
